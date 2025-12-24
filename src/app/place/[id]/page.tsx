@@ -32,7 +32,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description: desc,
-      url: `https://bibleatlas.com/place/${id}`,
+      url: `https://bibleatlas.xyz/place/${id}`,
       siteName: "BibleAtlas",
       images: [{ url: ogImage, width: 1200, height: 630 }],
       type: "article",
