@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "T76LKQ7QGR.com.seongyeon.bibleatlas.release",
+        "components": [
+          { "/": "/place/*" }
+        ]
+      }
+    ]
+  }
+}
