@@ -9,17 +9,27 @@ import { ExternalLink } from "lucide-react";
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
+  const { lang } = await searchParams;
   const place = await fetchPlace(id);
 
   const title = place ? `${place.name} | BibleAtlas` : "BibleAtlas";
-  const desc =
-    place?.koreanDescription ||
-    place?.description ||
-    "Explore biblical places with BibleAtlas.";
+  
+  let desc = "Explore biblical places with BibleAtlas.";
+  if (place) {
+    if (lang === 'en') {
+      desc = place.description;
+    } else if (lang === 'ko') {
+      desc = place.koreanDescription;
+    } else {
+      desc = place.description;
+    }
+  }
 
   // OG 이미지까지 만들면 전환율 더 좋아짐 (아래에서 설명)
   const ogImage = place?.imageTitle
@@ -48,10 +58,13 @@ export async function generateMetadata({
 
 export default async function PlacePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }) {
   const { id } = await params;
+  const { lang } = await searchParams;
   const place: PlaceDetail | null = await fetchPlace(id);
 
   if (!place) {
