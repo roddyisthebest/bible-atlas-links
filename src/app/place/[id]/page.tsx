@@ -18,7 +18,11 @@ export async function generateMetadata({
   const { lang } = await searchParams;
   const place = await fetchPlace(id);
 
-  const title = place ? `${place.name} | BibleAtlas` : "BibleAtlas";
+  let title = "BibleAtlas";
+  if (place) {
+    const placeName = lang === 'ko' ? place.koreanName : place.name;
+    title = `${placeName} | BibleAtlas`;
+  }
   
   let desc = "Explore biblical places with BibleAtlas.";
   if (place) {
