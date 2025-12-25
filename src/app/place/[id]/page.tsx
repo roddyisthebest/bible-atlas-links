@@ -23,12 +23,12 @@ export async function generateMetadata({
     const placeName = lang === 'ko' ? place.koreanName : place.name;
     title = `${placeName} | BibleAtlas`;
   }
-  
+
   let desc = "Explore biblical places with BibleAtlas.";
   if (place) {
-    if (lang === 'en') {
+    if (lang === "en") {
       desc = place.description;
-    } else if (lang === 'ko') {
+    } else if (lang === "ko") {
       desc = place.koreanDescription;
     } else {
       desc = place.description;
