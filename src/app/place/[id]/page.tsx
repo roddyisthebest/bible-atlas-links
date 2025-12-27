@@ -4,8 +4,7 @@ import type { Metadata } from "next";
 
 import { fetchPlace } from "./place-api";
 import { PlaceDetail } from "./types";
-import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import PlacePageClient from "./PlacePageClient";
 
 export async function generateMetadata({
   params,
@@ -20,7 +19,7 @@ export async function generateMetadata({
 
   let title = "BibleAtlas";
   if (place) {
-    const placeName = lang === 'ko' ? place.koreanName : place.name;
+    const placeName = lang === "ko" ? place.koreanName : place.name;
     title = `${placeName} | BibleAtlas`;
   }
 
@@ -72,53 +71,22 @@ export default async function PlacePage({
   const place: PlaceDetail | null = await fetchPlace(id);
 
   if (!place) {
+    const notFoundTitle = lang === 'ko' ? '장소를 찾을 수 없습니다' : 'Place not found';
+    const notFoundDesc = lang === 'ko' ? '요청하신 장소를 찾을 수 없습니다.' : 'The requested place could not be found.';
+    
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-            Place not found
+            {notFoundTitle}
           </h1>
           <p className="text-gray-600">
-            The requested place could not be found.
+            {notFoundDesc}
           </p>
         </div>
       </div>
     );
   }
 
-  const imageUrl = `https://a.openbible.info/geo/images/512/${place.imageTitle}`;
-
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-lg overflow-hidden">
-        {/* Image */}
-        <div className="relative h-64 w-full bg-gray-200">
-          <Image
-            src={imageUrl}
-            alt={place.name}
-            fill
-            sizes="(max-width: 768px) 100vw, 448px"
-            className="object-cover"
-            priority
-          />
-        </div>
-
-        {/* Content */}
-        <div className="p-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            {place.name}
-          </h1>
-          <p className="text-lg text-gray-600 mb-6">{place.koreanName}</p>
-
-          <a
-            href={`bibleatlas://place/${place.id}`}
-            className="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
-          >
-            Open in BibleAtlas App
-            <ExternalLink className="h-4 w-4" />
-          </a>
-        </div>
-      </div>
-    </div>
-  );
+  return <PlacePageClient place={place} lang={lang} />;
 }
